@@ -1,0 +1,206 @@
+<style>
+.modal-dialog {
+    max-width: 1000px !important;
+    width: 1000px !important;
+    margin: 30px auto !important;
+    top: 0 !important;
+    transform: none !important;
+}
+
+.modal-dialog:has(.modal-title) {
+    max-width: 400px !important;
+    width: 400px !important;
+}
+
+.modal-dialog:has(.modal-title) .modal-content {
+    border: 2px solid #17a2b8 !important;
+    border-radius: 8px !important;
+}
+
+.modal.show {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.challenge-name {
+    font-size: 2rem !important;
+}
+
+.challenge-value {
+    margin-bottom: 40px !important;
+}
+
+/* Left column: desc + files + submit */
+.challenge-desc {
+    display: block;
+    float: left !important;
+    width: 65%;
+    padding-right: 15px;
+    clear: none !important;
+    overflow: hidden !important;
+}
+
+.challenge-files {
+    float: left !important;
+    width: 65% !important;
+    clear: left !important;
+}
+
+.submit-row {
+    float: left !important;
+    width: 65% !important;
+    clear: none !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    border-top: 1px solid #333 !important;
+    margin-top: 30px !important;
+    padding-top: 24px !important;
+    padding-bottom: 8px !important;
+}
+
+.submit-row .col-md-9 {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    flex: 0 0 75% !important;
+    max-width: 75% !important;
+}
+
+.submit-row .col-md-3 {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    flex: 0 0 20% !important;
+    max-width: 20% !important;
+}
+
+/* Right column: hints */
+.hint-row {
+    float: right !important;
+    width: 30% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 70px) !important;
+    gap: 8px !important;
+    justify-content: center !important;
+    align-content: start !important;
+}
+
+.hint-row::before {
+    content: "Hints";
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+    width: 100%;
+    text-align: center;
+    grid-column: 1 / -1;
+}
+
+.hint-row[style*="display: none"]::before {
+    display: none !important;
+    content: none !important;
+}
+
+.hint-button-wrapper {
+    display: inline-block !important;
+    width: auto !important;
+    max-width: none !important;
+    flex: unset !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+}
+
+.btn-hint {
+    width: 70px !important;
+    height: 70px !important;
+    padding: 4px !important;
+    border-radius: 6px !important;
+    font-size: 1rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.notification-row {
+    clear: both !important;
+    width: 100% !important;
+}
+
+pre {
+    position: relative;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: #444;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.copy-btn:hover {
+    background: #666;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('copy-btn')) {
+            const code = e.target.parentElement.querySelector('code').innerText;
+            navigator.clipboard.writeText(code);
+            e.target.innerText = 'Copied!';
+            setTimeout(() => e.target.innerText = 'Copy', 1500);
+        }
+    });
+
+    function fixHints() {
+        const hintRow = document.querySelector('.hint-row');
+        if (hintRow) {
+            const hints = hintRow.querySelectorAll('.btn-hint');
+            if (hints.length === 0) {
+                hintRow.style.display = 'none';
+                const desc = document.querySelector('.challenge-desc');
+                const files = document.querySelector('.challenge-files');
+                const submit = document.querySelector('.submit-row');
+                if (desc) { desc.style.width = '100%'; desc.style.display = 'block'; desc.style.float = 'none'; }
+                if (files) { files.style.width = '100%'; files.style.float = 'none'; }
+                if (submit) { submit.style.width = '100%'; submit.style.float = 'none'; }
+            }
+        }
+        document.querySelectorAll('.btn-hint:not([data-fixed])').forEach((el, i) => {
+            el.setAttribute('data-fixed', '1');
+            const small = el.querySelector('small');
+            const match = small ? small.innerText.trim().match(/(\d+)/) : null;
+            const cost = match ? `${match[1]}pts` : 'free';
+            el.innerHTML = `<span style="display:flex;flex-direction:column;align-items:center;line-height:1.4">${i + 1}<small style="font-size:0.75rem;font-weight:bold">${cost}</small></span>`;
+        });
+    }
+
+    function fixCopy() {
+        document.querySelectorAll('pre:not([data-copy])').forEach(pre => {
+            pre.setAttribute('data-copy', '1');
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.innerText = 'Copy';
+            pre.appendChild(btn);
+        });
+    }
+
+    const observer = new MutationObserver(() => {
+        fixHints();
+        fixCopy();
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    document.addEventListener('shown.bs.modal', function() {
+        setTimeout(fixHints, 100);
+    });
+});
+</script>
