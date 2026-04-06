@@ -1,7 +1,7 @@
 <style>
 .modal-dialog {
-    max-width: 1000px !important;
-    width: 1000px !important;
+    max-width: 850px !important;
+    width: 850px !important;
     margin: 30px auto !important;
     top: 0 !important;
     transform: none !important;
@@ -28,13 +28,14 @@
 }
 
 .challenge-value {
-    margin-bottom: 40px !important;
+    margin-bottom: 0px !important;
 }
 
 .challenge-desc {
     display: block;
     float: left !important;
-    width: 65%;
+    width: 75%;
+    margin-top: 50px !important;
     padding-right: 15px;
     clear: none !important;
     overflow: hidden !important;
@@ -44,30 +45,34 @@
     float: left !important;
     width: 65% !important;
     clear: left !important;
+    margin-bottom: 0 !important;
 }
 
+
 .submit-row {
-    float: left !important;
-    width: 65% !important;
-    clear: none !important;
+    clear: both !important;
+    width: 70% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
     display: flex !important;
     flex-wrap: nowrap !important;
     align-items: center !important;
+    justify-content: center !important;
     border-top: 1px solid #333 !important;
-    margin-top: 30px !important;
+    margin-top: 40px !important;
     padding-top: 24px !important;
     padding-bottom: 8px !important;
 }
 
 .submit-row .col-md-9 {
     padding-left: 5px !important;
-    padding-right: 5px !important;
-    flex: 0 0 75% !important;
-    max-width: 75% !important;
+    padding-right: 2px !important;
+    flex: 0 0 80% !important;
+    max-width: 80% !important;
 }
 
 .submit-row .col-md-3 {
-    padding-left: 5px !important;
+    padding-left: 2px !important;
     padding-right: 5px !important;
     flex: 0 0 20% !important;
     max-width: 20% !important;
@@ -75,10 +80,10 @@
 
 .hint-row {
     float: right !important;
-    width: 30% !important;
+    width: 25% !important;
     display: grid !important;
     grid-template-columns: repeat(2, 70px) !important;
-    gap: 8px !important;
+    gap: 12px !important;
     justify-content: center !important;
     align-content: start !important;
 }
@@ -127,7 +132,6 @@
 pre {
     position: relative;
 }
-
 .copy-btn {
     position: absolute;
     top: 6px;
