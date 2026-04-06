@@ -31,7 +31,6 @@
     margin-bottom: 40px !important;
 }
 
-/* Left column: desc + files + submit */
 .challenge-desc {
     display: block;
     float: left !important;
@@ -74,7 +73,6 @@
     max-width: 20% !important;
 }
 
-/* Right column: hints */
 .hint-row {
     float: right !important;
     width: 30% !important;
@@ -149,16 +147,30 @@ pre {
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('copy-btn')) {
-            const code = e.target.parentElement.querySelector('code').innerText;
-            navigator.clipboard.writeText(code);
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('copy-btn')) {
+        const pre = e.target.closest('pre');
+        if (!pre) return;
+        const code = pre.querySelector('code');
+        if (!code) return;
+        const text = code.innerText.trim();
+        navigator.clipboard.writeText(text).then(() => {
             e.target.innerText = 'Copied!';
             setTimeout(() => e.target.innerText = 'Copy', 1500);
-        }
-    });
+        }).catch(() => {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            e.target.innerText = 'Copied!';
+            setTimeout(() => e.target.innerText = 'Copy', 1500);
+        });
+    }
+});
 
+document.addEventListener('DOMContentLoaded', function() {
     function fixHints() {
         const hintRow = document.querySelector('.hint-row');
         if (hintRow) {
